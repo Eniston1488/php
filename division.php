@@ -16,7 +16,6 @@ function divisionScript() {
         return 1;
     }
     
-    // Выполнение деления и вывод результата
     $result = $num1 / $num2;
     fwrite(STDOUT, "Результат деления: " . $result . PHP_EOL);
     return 0;

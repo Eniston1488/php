@@ -1,27 +1,57 @@
+php
 <?php
 
-// --- Пункт 1: Вывод названия файла и номера строки ---
-echo "1. Название этого файла: " . __FILE__ . "\n";
-echo "   А это строка номер: " . __LINE__ . "\n\n";
+echo "Введите данные:\n";
+$firstName = readline("Имя: ");
+$lastName = readline("Фамилия: ");
+$middleName = readline("Отчество: ");
 
-// --- Пункт 2: Создание многострочной переменной при помощи heredoc-синтаксиса ---
-$heredocText = <<<EOD
-2. Это пример текста,
-   созданного с помощью
-   heredoc-синтаксиса.
 
-   Он позволяет удобно
-   работать с многострочными
-   строками в PHP.
-EOD;
+function formatName($name) {
+    $name = trim($name);
+    if (strlen($name) === 0) return '';
+    
+    $firstChar = substr($name, 0, 2); 
+    $rest = substr($name, 2);
+    
+    $upperFirst = '';
+    if (preg_match('/[а-я]/iu', $firstChar)) {
+        $upperFirst = strtoupper($firstChar);
+    } else {
+        $upperFirst = strtoupper(substr($name, 0, 1));
+        $rest = substr($name, 1);
+    }
+    
+    return $upperFirst . strtolower($rest);
+}
 
-echo $heredocText . "\n\n";
+function getFirstLetter($name) {
+    if (strlen($name) === 0) return '';
+    
+    $firstChar = substr($name, 0, 2);
+    if (preg_match('/[а-я]/iu', $firstChar)) {
+        return strtoupper($firstChar);
+    } else {
+        return strtoupper(substr($name, 0, 1));
+    }
+}
 
-// --- Пункт 3: Использование переменных для построения фразы ---
-$a = 'Рыба';
-$b = 'человек';
+$formattedLastName = formatName($lastName);
+$formattedFirstName = formatName($firstName);
+$formattedMiddleName = formatName($middleName);
 
-// Решение: используем конкатенацию вместо интерполяции
-echo "3. " . $a . " рыбою сыта, а " . $b . " " . $b . "ом.\n";
+$fullName = $formattedLastName . ' ' . $formattedFirstName . ' ' . $formattedMiddleName;
 
+$surnameAndInitials = $formattedLastName . ' ' . 
+                     getFirstLetter($formattedFirstName) . '.' . 
+                     getFirstLetter($formattedMiddleName) . '.';
+
+$fio = getFirstLetter($formattedLastName) . 
+       getFirstLetter($formattedFirstName) . 
+       getFirstLetter($formattedMiddleName);
+
+echo "\nРезультаты:\n";
+echo "Полное имя: '$fullName'\n";
+echo "Фамилия и инициалы: '$surnameAndInitials'\n";
+echo "Аббревиатура: '$fio'\n";
 ?>
